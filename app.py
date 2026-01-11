@@ -7,20 +7,31 @@ import tensorflow as tf
 import xgboost as xgb
 
 # ===============================
-# LOAD MODELS AND PREPROCESSOR
+# CONFIG
 # ===============================
 st.set_page_config(page_title="AI Hiring Decision Demo")
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 st.title("Hiring Decision Prediction Demo")
 st.write("This app uses a Neural Network and XGBoost to estimate hiring decision outcomes.")
 
-# Load saved artifacts
-import joblib
-import tensorflow as tf
+# ===============================
+# LOAD MODELS AND PREPROCESSOR
+# ===============================
+@st.cache_resource
+def load_artifacts():
+    preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.pkl"))
+    nn_model = tf.keras.models.load_model(
+        os.path.join(BASE_DIR, "models", "nn_hiring_model.h5")
+    )
+    xgb_model = joblib.load(
+        os.path.join(BASE_DIR, "models", "xgb_hiring_model.pkl")
+    )
+    return preprocessor, nn_model, xgb_model
 
-preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.pkl"))
-nn_model = tf.keras.models.load_model(os.path.join(BASE_DIR, "models", "nn_hiring_model.h5"))
-xgb_model = joblib.load(os.path.join(BASE_DIR, "models", "xgb_hiring_model.pkl"))
+preprocessor, nn_model, xgb_model = load_artifacts()
+
 
 # ===============================
 # USER INPUT FORM
