@@ -14,9 +14,12 @@ st.title("Hiring Decision Prediction Demo")
 st.write("This app uses a Neural Network and XGBoost to estimate hiring decision outcomes.")
 
 # Load saved artifacts
-preprocessor = joblib.load("preprocessor.pkl")
-nn_model = tf.keras.models.load_model("models/nn_hiring_model.h5")
-xgb_model = joblib.load("models/xgb_hiring_model.pkl")
+import joblib
+import tensorflow as tf
+
+preprocessor = joblib.load(os.path.join(BASE_DIR, "preprocessor.pkl"))
+nn_model = tf.keras.models.load_model(os.path.join(BASE_DIR, "models", "nn_hiring_model.h5"))
+xgb_model = joblib.load(os.path.join(BASE_DIR, "models", "xgb_hiring_model.pkl"))
 
 # ===============================
 # USER INPUT FORM
